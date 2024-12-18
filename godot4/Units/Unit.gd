@@ -30,6 +30,11 @@ signal walk_finished
 			await ready
 		_sprite.position = value
 
+@export_range(1, 9223372036854775807) var max_health: int:
+	set(value):
+		assert(value > 0, "Must assign a max health greater than 0")
+		max_health = value
+
 ## Coordinates of the current cell the cursor moved to.
 var cell := Vector2.ZERO:
 	set(value):
@@ -53,6 +58,7 @@ var _is_walking := false:
 @onready var _sprite: Sprite2D = $PathFollow2D/Sprite
 @onready var _anim_player: AnimationPlayer = $AnimationPlayer
 @onready var _path_follow: PathFollow2D = $PathFollow2D
+@onready var _current_health := max_health
 
 
 func _ready() -> void:
@@ -91,3 +97,11 @@ func walk_along(path: PackedVector2Array) -> void:
 		curve.add_point(grid.calculate_map_position(point) - position)
 	cell = path[-1]
 	_is_walking = true
+
+func take_damage(damage: int) -> bool:
+	_current_health -= damage
+	if _current_health <= 0:
+		_current_health = 0
+		return true
+	
+	return false

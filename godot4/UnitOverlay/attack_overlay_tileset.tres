@@ -1,0 +1,21 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://5hbeg5kgnhr4"]
+
+[ext_resource type="Texture2D" uid="uid://c6cdvnrm3gmmm" path="res://UnitOverlay/attack_overlay.svg" id="1_n6djm"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hdg6q"]
+texture = ExtResource("1_n6djm")
+texture_region_size = Vector2i(80, 80)
+0:0/next_alternative_id = 9
+0:0/0 = 0
+0:0/1 = 1
+0:0/2 = 2
+0:0/3 = 3
+0:0/4 = 4
+0:0/5 = 5
+0:0/6 = 6
+0:0/7 = 7
+0:0/8 = 8
+
+[resource]
+tile_size = Vector2i(80, 80)
+sources/0 = SubResource("TileSetAtlasSource_hdg6q")

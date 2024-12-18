@@ -15,6 +15,7 @@ var _active_unit: Unit
 var _walkable_cells := []
 
 @onready var _unit_overlay: UnitOverlay = $UnitOverlay
+@onready var _attack_overlay: AttackOverlay = $AttackOverlay
 @onready var _unit_path: UnitPath = $UnitPath
 
 
@@ -99,6 +100,7 @@ func _move_active_unit(new_cell: Vector2) -> void:
 	_active_unit.walk_along(_unit_path.current_path)
 	await _active_unit.walk_finished
 	_clear_active_unit()
+	_attack_overlay.draw([new_cell + Vector2.LEFT, new_cell + Vector2.RIGHT, new_cell + Vector2.UP, new_cell + Vector2.DOWN])
 
 
 ## Selects the unit in the `cell` if there's one there.
