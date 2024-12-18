@@ -15,7 +15,7 @@ var _active_unit: Unit
 var _walkable_cells := []
 
 @onready var _unit_overlay: UnitOverlay = $UnitOverlay
-@onready var _attack_overlay: AttackOverlay = $AttackOverlay
+@onready var _attack_overlay: UnitOverlay = $AttackOverlay
 @onready var _unit_path: UnitPath = $UnitPath
 
 
