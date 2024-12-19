@@ -12,6 +12,7 @@ const DIRECTIONS = [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN]
 ## Mapping of coordinates of a cell to a reference to the unit it contains.
 var _units := {}
 var _active_unit: Unit
+var _attacking_unit: Unit
 var _walkable_cells := []
 
 @onready var _unit_overlay: UnitOverlay = $UnitOverlay
@@ -101,6 +102,7 @@ func _move_active_unit(new_cell: Vector2) -> void:
 	await _active_unit.walk_finished
 	_clear_active_unit()
 	_attack_overlay.draw([new_cell + Vector2.LEFT, new_cell + Vector2.RIGHT, new_cell + Vector2.UP, new_cell + Vector2.DOWN])
+	_attacking_unit = _units[new_cell]
 
 
 ## Selects the unit in the `cell` if there's one there.
@@ -114,6 +116,17 @@ func _select_unit(cell: Vector2) -> void:
 	_walkable_cells = get_walkable_cells(_active_unit)
 	_unit_overlay.draw(_walkable_cells)
 	_unit_path.initialize(_walkable_cells)
+
+func _attack(cell: Vector2) -> void:
+	_attack_overlay.clear()
+	if not is_occupied(cell):
+		return
+	
+	if cell.distance_to(_attacking_unit.cell) != 1:
+		return
+	
+	if _units.has(cell):
+		_units[cell].take_damage(10)
 
 
 ## Deselects the active unit, clearing the cells overlay and interactive path drawing.
@@ -131,6 +144,8 @@ func _clear_active_unit() -> void:
 
 ## Selects or moves a unit based on where the cursor is.
 func _on_Cursor_accept_pressed(cell: Vector2) -> void:
+	if _attacking_unit:
+		_attack(cell)
 	if not _active_unit:
 		_select_unit(cell)
 	elif _active_unit.is_selected:

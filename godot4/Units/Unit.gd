@@ -30,10 +30,7 @@ signal walk_finished
 			await ready
 		_sprite.position = value
 
-@export_range(1, 9223372036854775807) var max_health: int:
-	set(value):
-		assert(value > 0, "Must assign a max health greater than 0")
-		max_health = value
+@export_range(1, 100, 1, "or_greater") var max_health: int
 
 ## Coordinates of the current cell the cursor moved to.
 var cell := Vector2.ZERO:
