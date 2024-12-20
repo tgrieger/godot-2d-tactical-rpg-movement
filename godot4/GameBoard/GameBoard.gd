@@ -119,17 +119,14 @@ func _select_unit(cell: Vector2) -> void:
 
 func _attack(cell: Vector2) -> void:
 	_attack_overlay.clear()
-	if not is_occupied(cell):
-		return
-	
-	if cell.distance_to(_attacking_unit.cell) != 1:
-		return
-	
-	if _units.has(cell):
-		_units[cell].take_damage(10)
-	
-	_attacking_unit = null
 
+	if _units.has(cell) and cell.distance_to(_attacking_unit.cell) == 1:
+		if _units[cell].take_damage(10):
+			## delete unit
+			_units[cell].queue_free()
+			_units.erase(cell)
+
+	_attacking_unit = null
 
 ## Deselects the active unit, clearing the cells overlay and interactive path drawing.
 func _deselect_active_unit() -> void:

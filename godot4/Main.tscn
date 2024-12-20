@@ -42,7 +42,7 @@ curve = SubResource("Curve2D_yagc1")
 move_range = 3
 skin = ExtResource("8")
 skin_offset = Vector2(2, 9)
-max_health = 100
+max_health = 1
 
 [node name="Cat" parent="GameBoard" instance=ExtResource("2")]
 position = Vector2(850.293, 412.465)
