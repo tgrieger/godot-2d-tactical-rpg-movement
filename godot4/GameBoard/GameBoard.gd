@@ -127,6 +127,8 @@ func _attack(cell: Vector2) -> void:
 	
 	if _units.has(cell):
 		_units[cell].take_damage(10)
+	
+	_attacking_unit = null
 
 
 ## Deselects the active unit, clearing the cells overlay and interactive path drawing.
@@ -146,7 +148,7 @@ func _clear_active_unit() -> void:
 func _on_Cursor_accept_pressed(cell: Vector2) -> void:
 	if _attacking_unit:
 		_attack(cell)
-	if not _active_unit:
+	elif not _active_unit:
 		_select_unit(cell)
 	elif _active_unit.is_selected:
 		_move_active_unit(cell)
