@@ -11,6 +11,7 @@ const DIRECTIONS = [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN]
 
 ## Mapping of coordinates of a cell to a reference to the unit it contains.
 var _units := {}
+var _selected_unit: Unit
 var _active_unit: Unit
 var _attacking_unit: Unit
 var _walkable_cells := []
@@ -18,6 +19,7 @@ var _walkable_cells := []
 @onready var _unit_overlay: UnitOverlay = $UnitOverlay
 @onready var _attack_overlay: UnitOverlay = $AttackOverlay
 @onready var _unit_path: UnitPath = $UnitPath
+@onready var _menu = $PopupMenu
 
 
 func _ready() -> void:
@@ -101,21 +103,22 @@ func _move_active_unit(new_cell: Vector2) -> void:
 	_active_unit.walk_along(_unit_path.current_path)
 	await _active_unit.walk_finished
 	_clear_active_unit()
-	_attack_overlay.draw([new_cell + Vector2.LEFT, new_cell + Vector2.RIGHT, new_cell + Vector2.UP, new_cell + Vector2.DOWN])
-	_attacking_unit = _units[new_cell]
+	#_attack_overlay.draw([new_cell + Vector2.LEFT, new_cell + Vector2.RIGHT, new_cell + Vector2.UP, new_cell + Vector2.DOWN])
+	#_attacking_unit = _units[new_cell]
 
 
 ## Selects the unit in the `cell` if there's one there.
 ## Sets it as the `_active_unit` and draws its walkable cells and interactive move path. 
-func _select_unit(cell: Vector2) -> void:
-	if not _units.has(cell):
-		return
-
-	_active_unit = _units[cell]
+func _set_moving_unit() -> void:
+	_active_unit = _selected_unit
 	_active_unit.is_selected = true
 	_walkable_cells = get_walkable_cells(_active_unit)
 	_unit_overlay.draw(_walkable_cells)
 	_unit_path.initialize(_walkable_cells)
+
+func _set_attacking_unit() -> void:
+	_attacking_unit = _selected_unit
+	_attack_overlay.draw([_attacking_unit.cell + Vector2.LEFT, _attacking_unit.cell + Vector2.RIGHT, _attacking_unit.cell + Vector2.UP, _attacking_unit.cell + Vector2.DOWN])
 
 func _attack(cell: Vector2) -> void:
 	_attack_overlay.clear()
@@ -143,15 +146,39 @@ func _clear_active_unit() -> void:
 
 ## Selects or moves a unit based on where the cursor is.
 func _on_Cursor_accept_pressed(cell: Vector2) -> void:
+	if _active_unit and _active_unit.is_selected:
+		_move_active_unit(cell)
+		return
+	
 	if _attacking_unit:
 		_attack(cell)
-	elif not _active_unit:
-		_select_unit(cell)
-	elif _active_unit.is_selected:
-		_move_active_unit(cell)
+		return
+	
+	if not _units.has(cell):
+		return
+	
+	var test := get_global_mouse_position()
+	_menu.popup(Rect2(test.x, test.y, 100, 100))
+	_selected_unit = _units[cell]
+	
+	#if _attacking_unit:
+	#	_attack(cell)
+	#elif not _active_unit:
+	#	_select_unit(cell)
+	#elif _active_unit.is_selected:
+	#	_move_active_unit(cell)
 
 
 ## Updates the interactive path's drawing if there's an active and selected unit.
 func _on_Cursor_moved(new_cell: Vector2) -> void:
 	if _active_unit and _active_unit.is_selected:
 		_unit_path.draw(_active_unit.cell, new_cell)
+
+
+func _on_popup_menu_id_pressed(id):
+	if id == 0: # moving
+		_set_moving_unit()
+	elif id == 1: # attacking
+		_set_attacking_unit()
+		
+	_selected_unit = null

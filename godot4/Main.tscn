@@ -13,13 +13,13 @@
 [ext_resource type="TileSet" uid="uid://5hbeg5kgnhr4" path="res://UnitOverlay/attack_overlay_tileset.tres" id="11_hled6"]
 [ext_resource type="Script" path="res://UnitOverlay/UnitOverlay.gd" id="12_lcyuk"]
 
-[sub_resource type="Curve2D" id="Curve2D_yagc1"]
+[sub_resource type="Curve2D" id="Curve2D_nsb0b"]
 resource_local_to_scene = true
 
-[sub_resource type="Curve2D" id="Curve2D_g3l1m"]
+[sub_resource type="Curve2D" id="Curve2D_htojj"]
 resource_local_to_scene = true
 
-[sub_resource type="Curve2D" id="Curve2D_1oogj"]
+[sub_resource type="Curve2D" id="Curve2D_xv2qu"]
 resource_local_to_scene = true
 
 [node name="Main" type="Node2D"]
@@ -38,7 +38,7 @@ grid = ExtResource("4")
 
 [node name="Bear" parent="GameBoard" instance=ExtResource("2")]
 position = Vector2(600, 480)
-curve = SubResource("Curve2D_yagc1")
+curve = SubResource("Curve2D_nsb0b")
 move_range = 3
 skin = ExtResource("8")
 skin_offset = Vector2(2, 9)
@@ -46,7 +46,7 @@ max_health = 1
 
 [node name="Cat" parent="GameBoard" instance=ExtResource("2")]
 position = Vector2(850.293, 412.465)
-curve = SubResource("Curve2D_g3l1m")
+curve = SubResource("Curve2D_htojj")
 move_range = 8
 skin = ExtResource("9")
 skin_offset = Vector2(5, 12)
@@ -54,7 +54,7 @@ max_health = 100
 
 [node name="Squirrel" parent="GameBoard" instance=ExtResource("2")]
 position = Vector2(355.298, 298.556)
-curve = SubResource("Curve2D_1oogj")
+curve = SubResource("Curve2D_xv2qu")
 move_range = 5
 skin = ExtResource("7")
 skin_offset = Vector2(6, 17)
@@ -67,5 +67,13 @@ tile_set = ExtResource("11_hled6")
 format = 2
 script = ExtResource("12_lcyuk")
 
+[node name="PopupMenu" type="PopupMenu" parent="GameBoard"]
+item_count = 2
+item_0/text = "Move"
+item_1/text = "Attack"
+item_1/id = 1
+
 [connection signal="accept_pressed" from="GameBoard/Cursor" to="GameBoard" method="_on_Cursor_accept_pressed"]
 [connection signal="moved" from="GameBoard/Cursor" to="GameBoard" method="_on_Cursor_moved"]
+[connection signal="id_pressed" from="GameBoard/PopupMenu" to="GameBoard" method="_on_popup_menu_id_pressed"]
+[connection signal="popup_hide" from="GameBoard/PopupMenu" to="GameBoard" method="_on_popup_menu_popup_hide"]
