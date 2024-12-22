@@ -97,6 +97,7 @@ func _move_active_unit(new_cell: Vector2) -> void:
 	if is_occupied(new_cell) or not new_cell in _walkable_cells:
 		return
 	# warning-ignore:return_value_discarded
+	_active_unit.can_move = false
 	_units.erase(_active_unit.cell)
 	_units[new_cell] = _active_unit
 	_deselect_active_unit()
@@ -124,6 +125,7 @@ func _attack(cell: Vector2) -> void:
 	_attack_overlay.clear()
 
 	if _units.has(cell) and cell.distance_to(_attacking_unit.cell) == 1:
+		_attacking_unit.can_attack = false
 		if _units[cell].take_damage(10):
 			## delete unit
 			_units[cell].queue_free()
@@ -157,9 +159,11 @@ func _on_Cursor_accept_pressed(cell: Vector2) -> void:
 	if not _units.has(cell):
 		return
 	
-	var test := get_global_mouse_position()
-	_menu.popup(Rect2(test.x, test.y, 100, 100))
 	_selected_unit = _units[cell]
+	var test := get_global_mouse_position()
+	_menu.set_item_disabled(0, !_selected_unit.can_move)
+	_menu.set_item_disabled(1, !_selected_unit.can_attack)
+	_menu.popup(Rect2(test.x, test.y, 100, 100))
 	
 	#if _attacking_unit:
 	#	_attack(cell)

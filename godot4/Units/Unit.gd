@@ -47,6 +47,9 @@ var is_selected := false:
 		else:
 			_anim_player.play("idle")
 
+var can_move := true
+var can_attack := true
+
 var _is_walking := false:
 	set(value):
 		_is_walking = value
