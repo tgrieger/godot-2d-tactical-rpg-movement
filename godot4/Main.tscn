@@ -13,13 +13,13 @@
 [ext_resource type="TileSet" uid="uid://5hbeg5kgnhr4" path="res://UnitOverlay/attack_overlay_tileset.tres" id="11_hled6"]
 [ext_resource type="Script" path="res://UnitOverlay/UnitOverlay.gd" id="12_lcyuk"]
 
-[sub_resource type="Curve2D" id="Curve2D_k3d6y"]
+[sub_resource type="Curve2D" id="Curve2D_s28ly"]
 resource_local_to_scene = true
 
-[sub_resource type="Curve2D" id="Curve2D_oex3y"]
+[sub_resource type="Curve2D" id="Curve2D_m1xwc"]
 resource_local_to_scene = true
 
-[sub_resource type="Curve2D" id="Curve2D_asa1p"]
+[sub_resource type="Curve2D" id="Curve2D_tmy7t"]
 resource_local_to_scene = true
 
 [node name="Main" type="Node2D"]
@@ -38,27 +38,30 @@ grid = ExtResource("4")
 
 [node name="Bear" parent="GameBoard" instance=ExtResource("2")]
 position = Vector2(600, 480)
-curve = SubResource("Curve2D_k3d6y")
+curve = SubResource("Curve2D_s28ly")
 move_range = 3
 skin = ExtResource("8")
 skin_offset = Vector2(2, 9)
 max_health = 1
+team = 0
 
 [node name="Cat" parent="GameBoard" instance=ExtResource("2")]
 position = Vector2(850.293, 412.465)
-curve = SubResource("Curve2D_oex3y")
+curve = SubResource("Curve2D_m1xwc")
 move_range = 8
 skin = ExtResource("9")
 skin_offset = Vector2(5, 12)
 max_health = 100
+team = 1
 
 [node name="Squirrel" parent="GameBoard" instance=ExtResource("2")]
 position = Vector2(355.298, 298.556)
-curve = SubResource("Curve2D_asa1p")
+curve = SubResource("Curve2D_tmy7t")
 move_range = 5
 skin = ExtResource("7")
 skin_offset = Vector2(6, 17)
 max_health = 100
+team = 0
 
 [node name="AttackOverlay" type="TileMap" parent="GameBoard"]
 modulate = Color(1, 1, 1, 0.329412)
@@ -68,6 +71,7 @@ format = 2
 script = ExtResource("12_lcyuk")
 
 [node name="PopupMenu" type="PopupMenu" parent="GameBoard"]
+size = Vector2i(100, 68)
 item_count = 2
 item_0/text = "Move"
 item_1/text = "Attack"

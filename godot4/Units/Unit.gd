@@ -32,6 +32,8 @@ signal walk_finished
 
 @export_range(1, 100, 1, "or_greater") var max_health: int
 
+@export var team: int
+
 ## Coordinates of the current cell the cursor moved to.
 var cell := Vector2.ZERO:
 	set(value):
@@ -105,3 +107,17 @@ func take_damage(damage: int) -> bool:
 		return true
 	
 	return false
+
+func set_active() -> void:
+	self.modulate = Color(1, 1, 1, 1)
+	can_move = true
+	can_attack = true
+
+func set_inactive() -> void:
+	self.modulate = Color(.059, .059, .059)
+	can_move = false
+	can_attack = false
+
+func try_set_inactive() -> void:
+	if !can_move and !can_attack:
+		set_inactive()

@@ -15,6 +15,7 @@ var _selected_unit: Unit
 var _active_unit: Unit
 var _attacking_unit: Unit
 var _walkable_cells := []
+var _active_team := 0
 
 @onready var _unit_overlay: UnitOverlay = $UnitOverlay
 @onready var _attack_overlay: UnitOverlay = $AttackOverlay
@@ -57,6 +58,10 @@ func _reinitialize() -> void:
 		var unit := child as Unit
 		if not unit:
 			continue
+
+		if unit.team != _active_team:
+			unit.set_inactive()
+
 		_units[unit.cell] = unit
 
 
@@ -96,16 +101,15 @@ func _flood_fill(cell: Vector2, max_distance: int) -> Array:
 func _move_active_unit(new_cell: Vector2) -> void:
 	if is_occupied(new_cell) or not new_cell in _walkable_cells:
 		return
-	# warning-ignore:return_value_discarded
+
 	_active_unit.can_move = false
 	_units.erase(_active_unit.cell)
 	_units[new_cell] = _active_unit
 	_deselect_active_unit()
 	_active_unit.walk_along(_unit_path.current_path)
 	await _active_unit.walk_finished
+	_active_unit.try_set_inactive()
 	_clear_active_unit()
-	#_attack_overlay.draw([new_cell + Vector2.LEFT, new_cell + Vector2.RIGHT, new_cell + Vector2.UP, new_cell + Vector2.DOWN])
-	#_attacking_unit = _units[new_cell]
 
 
 ## Selects the unit in the `cell` if there's one there.
@@ -131,6 +135,7 @@ func _attack(cell: Vector2) -> void:
 			_units[cell].queue_free()
 			_units.erase(cell)
 
+	_attacking_unit.try_set_inactive()
 	_attacking_unit = null
 
 ## Deselects the active unit, clearing the cells overlay and interactive path drawing.
@@ -159,18 +164,14 @@ func _on_Cursor_accept_pressed(cell: Vector2) -> void:
 	if not _units.has(cell):
 		return
 	
+	if _active_team != _units[cell].team:
+		return
+	
 	_selected_unit = _units[cell]
 	var test := get_global_mouse_position()
 	_menu.set_item_disabled(0, !_selected_unit.can_move)
 	_menu.set_item_disabled(1, !_selected_unit.can_attack)
 	_menu.popup(Rect2(test.x, test.y, 100, 100))
-	
-	#if _attacking_unit:
-	#	_attack(cell)
-	#elif not _active_unit:
-	#	_select_unit(cell)
-	#elif _active_unit.is_selected:
-	#	_move_active_unit(cell)
 
 
 ## Updates the interactive path's drawing if there's an active and selected unit.

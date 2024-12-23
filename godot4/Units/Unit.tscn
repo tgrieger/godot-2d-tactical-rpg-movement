@@ -44,6 +44,7 @@ _data = {
 z_index = 1
 script = ExtResource("1")
 grid = ExtResource("2")
+team = null
 
 [node name="PathFollow2D" type="PathFollow2D" parent="."]
 rotates = false
