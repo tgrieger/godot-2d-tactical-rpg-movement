@@ -187,3 +187,19 @@ func _on_popup_menu_id_pressed(id):
 		_set_attacking_unit()
 		
 	_selected_unit = null
+
+func _end_turn_pressed():
+	if _active_team == 0:
+		_active_team = 1
+	else:
+		_active_team = 0
+	
+	for child in get_children():
+		var unit := child as Unit
+		if not unit:
+			continue
+
+		if unit.team != _active_team:
+			unit.set_inactive()
+		else:
+			unit.set_active()

@@ -13,13 +13,13 @@
 [ext_resource type="TileSet" uid="uid://5hbeg5kgnhr4" path="res://UnitOverlay/attack_overlay_tileset.tres" id="11_hled6"]
 [ext_resource type="Script" path="res://UnitOverlay/UnitOverlay.gd" id="12_lcyuk"]
 
-[sub_resource type="Curve2D" id="Curve2D_s28ly"]
+[sub_resource type="Curve2D" id="Curve2D_xecxa"]
 resource_local_to_scene = true
 
-[sub_resource type="Curve2D" id="Curve2D_m1xwc"]
+[sub_resource type="Curve2D" id="Curve2D_gmgjs"]
 resource_local_to_scene = true
 
-[sub_resource type="Curve2D" id="Curve2D_tmy7t"]
+[sub_resource type="Curve2D" id="Curve2D_ehigv"]
 resource_local_to_scene = true
 
 [node name="Main" type="Node2D"]
@@ -38,7 +38,7 @@ grid = ExtResource("4")
 
 [node name="Bear" parent="GameBoard" instance=ExtResource("2")]
 position = Vector2(600, 480)
-curve = SubResource("Curve2D_s28ly")
+curve = SubResource("Curve2D_xecxa")
 move_range = 3
 skin = ExtResource("8")
 skin_offset = Vector2(2, 9)
@@ -47,7 +47,7 @@ team = 0
 
 [node name="Cat" parent="GameBoard" instance=ExtResource("2")]
 position = Vector2(850.293, 412.465)
-curve = SubResource("Curve2D_m1xwc")
+curve = SubResource("Curve2D_gmgjs")
 move_range = 8
 skin = ExtResource("9")
 skin_offset = Vector2(5, 12)
@@ -56,7 +56,7 @@ team = 1
 
 [node name="Squirrel" parent="GameBoard" instance=ExtResource("2")]
 position = Vector2(355.298, 298.556)
-curve = SubResource("Curve2D_tmy7t")
+curve = SubResource("Curve2D_ehigv")
 move_range = 5
 skin = ExtResource("7")
 skin_offset = Vector2(6, 17)
@@ -77,7 +77,15 @@ item_0/text = "Move"
 item_1/text = "Attack"
 item_1/id = 1
 
+[node name="Button" type="Button" parent="GameBoard"]
+offset_left = 1066.0
+offset_top = 606.0
+offset_right = 1144.0
+offset_bottom = 640.0
+text = "End Turn"
+
 [connection signal="accept_pressed" from="GameBoard/Cursor" to="GameBoard" method="_on_Cursor_accept_pressed"]
 [connection signal="moved" from="GameBoard/Cursor" to="GameBoard" method="_on_Cursor_moved"]
 [connection signal="id_pressed" from="GameBoard/PopupMenu" to="GameBoard" method="_on_popup_menu_id_pressed"]
 [connection signal="popup_hide" from="GameBoard/PopupMenu" to="GameBoard" method="_on_popup_menu_popup_hide"]
+[connection signal="pressed" from="GameBoard/Button" to="GameBoard" method="_end_turn_pressed"]
